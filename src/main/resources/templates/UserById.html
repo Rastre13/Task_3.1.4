@@ -12,12 +12,16 @@
 <p th:text="${'Lastname:' + user.getLastName()}">VALUE</p>
 <p th:text="${'Age:' + user.getAge()}">VALUE</p>
 <p th:text="${'Email:' + user.getEmail()}">VALUE</p>
-<p th:text="${'Role:' + user.getRoles()}">VALUE</p>
+<div th:each="role : ${user.getRoles()}">
+    <p th:text="${role.getName()}">VALUE</p>
+</div>
 
 <a th:href="@{/admin/users/{id}/edit(id=${user.getId()})}">Edit</a>
 <a th:href="@{/admin/users/{id}/delete(id=${user.getId()})}">Delete</a>
 <hr/>
 <a href="/admin/users">Back</a>
+
+<a href="/login">Logout</a>
 
 </body>
 </html>

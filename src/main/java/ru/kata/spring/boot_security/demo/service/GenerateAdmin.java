@@ -25,6 +25,9 @@ public class GenerateAdmin {
 
     private Role role1 = new Role(1L, "ROLE_ADMIN");
     private Role role2 = new Role(2L, "ROLE_USER");
+    private Role role3 = new Role(3L, "ROLE_MANAGER");
+    private Role role4 = new Role(4L, "ROLE_DIRECTOR");
+    private Role role5 = new Role(5L, "ROLE_ACCOUNTANT");
 
     public Role getRole1() {
         return role1;
@@ -34,14 +37,29 @@ public class GenerateAdmin {
         return role2;
     }
 
+    public Role getRole3() {
+        return role3;
+    }
+
+    public Role getRole4() {
+        return role4;
+    }
+
+    public Role getRole5() {
+        return role5;
+    }
+
     @PostConstruct
     public void setAdmin() {
         roleRepository.save(getRole1());
         roleRepository.save(getRole2());
+        roleRepository.save(getRole3());
+        roleRepository.save(getRole4());
+        roleRepository.save(getRole5());
 
         User admin = new User();
-        admin.setUsername("admin");
-        admin.setPassword(new BCryptPasswordEncoder().encode("admin"));
+        admin.setUsername("1");
+        admin.setPassword(new BCryptPasswordEncoder().encode("1"));
         admin.setFirstName("admin");
         admin.setLastName("adminov");
         admin.setAge((byte) 20);

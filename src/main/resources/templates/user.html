@@ -14,7 +14,9 @@
 <p th:text="${'LastName:' + authorisedUser.getLastName()}">VALUE</p>
 <p th:text="${'Age:' + authorisedUser.getAge()}">VALUE</p>
 <p th:text="${'Email:' + authorisedUser.getEmail()}">VALUE</p>
-<p th:text="${'Email:' + authorisedRoles.getName()}">VALUE</p>
+<div th:each="authorisedRoles : ${authorisedUser.getRoles()}">
+    <p th:text="${'Roles:' + authorisedRoles.getName()}">VALUE</p>
+</div>
 
 <hr/>
 <a href="/login">Logout</a>

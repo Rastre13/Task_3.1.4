@@ -51,7 +51,7 @@ public class AdminController {
 
     @PostMapping("/users/{id}")
     public String update(@ModelAttribute("user") User user) {
-        userService.saveUser(user);
+        userService.updateUser(user);
         return "redirect:/admin/users/{id}";
     }
 
