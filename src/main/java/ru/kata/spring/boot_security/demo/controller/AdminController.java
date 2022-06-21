@@ -1,8 +1,10 @@
 package ru.kata.spring.boot_security.demo.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
@@ -15,15 +17,23 @@ public class AdminController {
         this.userService = userService;
     }
 
-    @GetMapping()
-    public String getAdminPage() {
-        return "admin";
-    }
+//    @GetMapping()
+//    public String getAdminPage() {
+//        return "admin";
+//    }
 
-    @GetMapping("/users")
-    public String getAllUsers(Model model) {
+//    @GetMapping()
+//    public String getAllUsers(Model model) {
+//        model.addAttribute("allUsers", userService.allUsers());
+//        return "admin"; //list было
+//    }
+
+    @GetMapping()
+    public String getAllUsers(@AuthenticationPrincipal User user, Role role, Model model) {
         model.addAttribute("allUsers", userService.allUsers());
-        return "list";
+        model.addAttribute("authorisedUser", user);
+        model.addAttribute("authorisedRoles", role);
+        return "admin"; //list было
     }
 
     @GetMapping("/users/{id}")

@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.UserRepository;
+import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.util.Arrays;
@@ -19,12 +20,12 @@ import java.util.Optional;
 //@Transactional
 public class UserService implements UserDetailsService {
     private UserRepository userRepository;
-    private GenerateAdmin generateAdmin;
+//    private GenerateAdmin generateAdmin;
 
     @Autowired
-    public UserService(UserRepository userRepository, GenerateAdmin generateAdmin) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.generateAdmin = generateAdmin;
+//        this.generateAdmin = generateAdmin;
     }
 
     @Override
@@ -51,7 +52,9 @@ public class UserService implements UserDetailsService {
         if (userFromDB != null) {
             return false;
         }
-        user.setRoles(Collections.singleton(generateAdmin.getRole2()));
+//        user.setRoles(Collections.singleton(generateAdmin.getRole2()));
+        user.setRoles(Collections.singleton(new Role(2L, "ROLE_USER"))); // Создавать выбранную роль
+
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
         return true;
