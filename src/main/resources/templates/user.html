@@ -31,7 +31,7 @@
         <a><b th:text="${authorisedUser.getEmail()}">VALUE</b></a>
             <a th:text="${' with roles: '}">VALUE</a>
             <a th:each="authorisedRoles : ${authorisedUser.getRoles()}">
-            <a th:text="${authorisedRoles.getName()}">VALUE</a>
+            <a th:text="${authorisedRoles.toString()}">VALUE</a>
         </a>
     </span>
     <ul class="nav">
@@ -44,6 +44,14 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-2 pl-0 pr-0 pt-3 bg-white" style="height: 100vh">
+            <div th:each="authorisedRoles : ${authorisedUser.getRoles()}">
+                <div th:if="${authorisedRoles.toString() != 'ADMIN'}">
+                    <a class="btn btn-primary btn-block d-none" style="text-align: left" href="/admin" role="button">Admin</a>
+                </div>
+                <div th:unless="${authorisedRoles.toString() != 'ADMIN'}">
+                    <a class="btn btn-link btn-block d-block text-decoration-none" style="text-align: left" href="/admin" role="button">Admin</a>
+                </div>
+            </div>
             <a class="btn btn-primary btn-block" style="text-align: left" href="/user" role="button">User</a>
         </div>
         <div class="col-10 px-4 pt-1 my-2 bg-light text-black">
@@ -78,7 +86,7 @@
                                 <td th:text="${authorisedUser.getEmail()}">VALUE</td>
                                 <td>
                                     <a th:each="authorisedRoles : ${authorisedUser.getRoles()}">
-                                        <a th:text="${authorisedRoles.getName()}">VALUE</a>
+                                        <a th:text="${authorisedRoles.toString()}">VALUE</a>
                                     </a>
                                 </td>
                             </tr>
@@ -87,7 +95,6 @@
                     </li>
                 </ul>
             </div>
-            </table>
         </div>
     </div>
 </div>

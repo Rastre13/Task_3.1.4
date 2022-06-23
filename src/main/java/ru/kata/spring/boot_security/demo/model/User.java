@@ -20,7 +20,6 @@ public class User implements UserDetails {
     private Byte age;
     private String email;
 
-//    @Transient
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles;
 
@@ -33,7 +32,6 @@ public class User implements UserDetails {
         this.age = age;
         this.email = email;
     }
-
 
     public Long getId() {
         return id;
