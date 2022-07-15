@@ -11,8 +11,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
 
 @Component
 public class GenerateAdmin {

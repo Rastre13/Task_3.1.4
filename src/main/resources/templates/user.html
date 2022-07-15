@@ -1,19 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Spring Security Example</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <title>UserData</title>
     <style>
         ul li a {
@@ -26,13 +16,13 @@
 </head>
 
 <body style="background: #f8f9fa">
+
+<!--Строка, показывающая авторизованного пользователя-->
 <nav class="navbar bg-dark navbar-dark">
-    <span class="navbar-text">
-        <a><b th:text="${authorisedUser.getEmail()}">VALUE</b></a>
-            <a th:text="${' with roles: '}">VALUE</a>
-            <a th:each="authorisedRoles : ${authorisedUser.getRoles()}">
-            <a th:text="${authorisedRoles.toString()}">VALUE</a>
-        </a>
+
+    <!--Внедрение данных реализовано в js-->
+    <span class="navbar-text" id="authority">
+
     </span>
     <ul class="nav">
         <li class="nav-item">
@@ -41,55 +31,42 @@
     </ul>
 </nav>
 
+<!--Вся остальная страница-->
 <div class="container-fluid">
     <div class="row">
         <div class="col-2 pl-0 pr-0 pt-3 bg-white" style="height: 100vh">
-            <div th:each="authorisedRoles : ${authorisedUser.getRoles()}">
-                <div th:if="${authorisedRoles.toString() != 'ADMIN'}">
-                    <a class="btn btn-primary btn-block d-none" style="text-align: left" href="/admin" role="button">Admin</a>
-                </div>
-                <div th:unless="${authorisedRoles.toString() != 'ADMIN'}">
-                    <a class="btn btn-link btn-block d-block text-decoration-none" style="text-align: left" href="/admin" role="button">Admin</a>
-                </div>
+
+            <!--Проверка на админку-->
+            <div id="is_user">
+
             </div>
             <a class="btn btn-primary btn-block" style="text-align: left" href="/user" role="button">User</a>
         </div>
+
+        <!--Правая часть страницы-->
         <div class="col-10 px-4 pt-1 my-2 bg-light text-black">
             <h1>User information-page</h1>
             <div class="card">
                 <div class="card-header">
-                    <b>
-                        <font size="4" face="sans-serif">
-                            About user
-                        </font>
-                    </b>
+                    <b><font size="4" face="sans-serif">About user</font></b>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <table class="table table-striped table-hover bg-white">
                             <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">First Name</th>
-                                <th scope="col">Last Name</th>
-                                <th scope="col">Age</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Role</th>
-                            </tr>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">First Name</th>
+                                    <th scope="col">Last Name</th>
+                                    <th scope="col">Age</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
+                                </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td th:text="${authorisedUser.getId}">VALUE</td>
-                                <td th:text="${authorisedUser.getFirstName()}">VALUE</td>
-                                <td th:text="${authorisedUser.getLastName()}">VALUE</td>
-                                <td th:text="${authorisedUser.getAge()}">VALUE</td>
-                                <td th:text="${authorisedUser.getEmail()}">VALUE</td>
-                                <td>
-                                    <a th:each="authorisedRoles : ${authorisedUser.getRoles()}">
-                                        <a th:text="${authorisedRoles.toString()}">VALUE</a>
-                                    </a>
-                                </td>
-                            </tr>
+
+                            <!--Внедрение данных реализовано в js-->
+                            <tbody  id="table_user">
+
                             </tbody>
                         </table>
                     </li>
@@ -98,5 +75,16 @@
         </div>
     </div>
 </div>
+<script
+        src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="/userpanel.js"></script>
 </body>
 </html>

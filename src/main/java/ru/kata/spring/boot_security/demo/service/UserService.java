@@ -42,12 +42,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public Collection<Role> allRoles() {
-        return roleRepository.findAll();
-    }
-
-    public boolean saveUser(User user, Collection<Role> roles) {
-        user.setRoles(roles);
+    public boolean saveUser(User user) {
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         userRepository.save(user);
         return true;
