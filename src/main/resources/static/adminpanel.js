@@ -7,7 +7,6 @@ function showAllUsers() {
             return response.json();
         })
         .then((allUsers) => {
-            console.log(allUsers);
             let tbody = document.getElementById('userTable');
             let count = '';
             allUsers.forEach((user) => {
@@ -15,8 +14,7 @@ function showAllUsers() {
                 user.roles.forEach((role) => {
                     roles = roles + role.name.replace("ROLE_", "") + ' '
                 });
-                count += `
-                <tr>
+                count += `<tr id="user${user.id}">
                     <td> ${user.id} </td>
                     <td> ${user.firstName} </td>
                     <td> ${user.lastName} </td>
@@ -25,10 +23,58 @@ function showAllUsers() {
                     <td> ${roles} </td>
                     <td> <button class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="openModal(${user.id})">Edit</button> </td>
                     <td> <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="openModal(${user.id})">Delete</button> </td>
-                </tr>
-            `
+                </tr>`
             })
             tbody.innerHTML = count;
+        })
+}
+
+function changeTable(id, operation) {
+    fetch(url + "/" + id)
+        .then((r) => {
+            return r.json();
+        })
+        .then((changeRow) => {
+            if (operation === "add") {
+                let tbody = document.getElementById('userTable');
+                let roles = "";
+                changeRow.roles.forEach((role) => {
+                    roles = roles + role.name.replace("ROLE_", "") + ' '
+                });
+                tbody.insertAdjacentHTML('beforeend', `
+            <tr id="user${changeRow.id}">
+                    <td> ${changeRow.id} </td>
+                    <td> ${changeRow.firstName} </td>
+                    <td> ${changeRow.lastName} </td>
+                    <td> ${changeRow.age} </td>
+                    <td> ${changeRow.email} </td>
+                    <td> ${roles} </td>
+                    <td> <button class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="openModal(${changeRow.id})">Edit</button> </td>
+                    <td> <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="openModal(${changeRow.id})">Delete</button> </td>
+                </tr>
+            `);
+            } else if (operation === "edit") {
+                let element = document.getElementById('user' + changeRow.id);
+                let roles = "";
+                changeRow.roles.forEach((role) => {
+                    roles = roles + role.name.replace("ROLE_", "") + ' '
+                });
+                let tr = `<tr id="user${changeRow.id}">
+            <td> ${changeRow.id} </td>
+                    <td> ${changeRow.firstName} </td>
+                    <td> ${changeRow.lastName} </td>
+                    <td> ${changeRow.age} </td>
+                    <td> ${changeRow.email} </td>
+                    <td> ${roles} </td>
+                    <td> <button class="btn btn-info" data-toggle="modal" data-target="#editModal" onclick="openModal(${changeRow.id})">Edit</button> </td>
+                    <td> <button class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="openModal(${changeRow.id})">Delete</button> </td>
+            </tr>`
+                element.insertAdjacentHTML('beforebegin', tr);
+                element.remove();
+            } else if (operation === "delete") {
+                let element = document.getElementById('user' + changeRow.id);
+                element.remove();
+            }
         })
 }
 
@@ -68,16 +114,20 @@ function createUser() {
             roles: Array.from(document.getElementById("role")).filter(option => option.selected).map(option => option.value)
         })
     })
-        .then((r) => {
-            document.getElementById("nav-user-table-tab").click();
-            showAllUsers();
-            newUserForm.reset();
+            .then((r) => {
+            return r.json();
         })
+            .then((addRow) => {
+                document.getElementById("nav-user-table-tab").click();
+                newUserForm.reset();
+                changeTable(addRow.id, "add");
+        })
+
 }
 
 function editUser() {
-    let editForm = document.getElementById("editId").value;
-    fetch(url + "/" + editForm, {
+    let editId = document.getElementById("editId").value;
+    fetch(url + "/" + editId, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -94,15 +144,17 @@ function editUser() {
         })
     })
         .then((r) => {
+            console.log(Array.from(document.getElementById("editRole")).filter(option => option.selected).map(option => option.value))
             document.getElementById("nav-user-table-tab").click();
             $('#editModal').modal("hide")
-            showAllUsers();
+            changeTable(editId, "edit");
         })
 }
 
 function deleteUser() {
-    let deleteUserForm = document.getElementById("deleteId").value;
-    fetch(url + "/" + deleteUserForm, {
+    let deleteId = document.getElementById("deleteId").value;
+    changeTable(deleteId, "delete");
+    fetch(url + "/" + deleteId, {
         method: 'DELETE',
         headers: {
             'Accept': 'application/json',
@@ -112,7 +164,6 @@ function deleteUser() {
         .then((r) => {
             document.getElementById("nav-user-table-tab").click();
             $('#deleteModal').modal("hide")
-            showAllUsers();
         })
 }
 
