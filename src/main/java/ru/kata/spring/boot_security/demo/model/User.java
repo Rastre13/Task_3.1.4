@@ -20,7 +20,7 @@ public class User implements UserDetails {
     private Byte age;
     private String email;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private Collection<Role> roles;
 
     public User() {
